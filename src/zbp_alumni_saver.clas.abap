@@ -1,0 +1,5 @@
+CLASS zbp_alumni_saver DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zi_alumniregistration.
+ENDCLASS.
+
+CLASS zbp_alumni_saver IMPLEMENTATION.
+ENDCLASS.

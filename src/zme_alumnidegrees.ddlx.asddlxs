@@ -1,0 +1,86 @@
+@Metadata.layer: #CORE
+
+@UI.headerInfo: {
+  typeName:       'Degree',
+  typeNamePlural: 'Degrees',
+  title:          {
+    type:  #STANDARD,
+    value: 'DegreeName'
+  },
+  description:    {
+    type:  #STANDARD,
+    value: 'GradYear'
+  }
+}
+
+annotate view ZC_AlumniDegrees with
+{
+
+  @UI.facet: [
+    {
+      id:              'DegreeHeaderFacet',
+      purpose:         #HEADER,
+      type:            #FIELDGROUP_REFERENCE,
+      targetQualifier: 'DegreeHeaderGroup',
+      position:        10
+    },
+    {
+      id:              'DegreeInfoFacet',
+      label:           'Degree Information',
+      purpose:         #STANDARD,
+      type:            #FIELDGROUP_REFERENCE,
+      targetQualifier: 'DegreeGroup',
+      position:        10
+    },
+    {
+      id:              'DegreeAdminFacet',
+      label:           'Administrative Data',
+      purpose:         #STANDARD,
+      type:            #FIELDGROUP_REFERENCE,
+      targetQualifier: 'AdminGroup',
+      position:        20
+    }
+  ]
+
+  /* ── Keys ────────────────────────────────────── */
+  @UI.fieldGroup:     [{ qualifier: 'DegreeHeaderGroup', position: 10, label: 'Alumni ID'  },
+                       { qualifier: 'DegreeGroup',       position: 10, label: 'Alumni ID'  }]
+  @UI.lineItem:       [{ position: 10, label: 'Alumni ID', importance: #HIGH }]
+  @UI.identification: [{ position: 10 }]
+  AlumniId;
+
+  @UI.fieldGroup:     [{ qualifier: 'DegreeHeaderGroup', position: 20, label: 'Degree ID'  },
+                       { qualifier: 'DegreeGroup',       position: 20, label: 'Degree ID'  }]
+  @UI.lineItem:       [{ position: 20, label: 'Degree ID', importance: #HIGH }]
+  @UI.identification: [{ position: 20 }]
+  DegreeId;
+
+  /* ── Degree Info ─────────────────────────────── */
+  @UI.fieldGroup:     [{ qualifier: 'DegreeGroup', position: 30, label: 'Degree Name' }]
+  @UI.lineItem:       [{ position: 30, label: 'Degree Name', importance: #HIGH }]
+  @UI.selectionField: [{ position: 10 }]
+  @UI.identification: [{ position: 30 }]
+  DegreeName;
+
+  @UI.fieldGroup:     [{ qualifier: 'DegreeGroup', position: 40, label: 'Graduation Year' }]
+  @UI.lineItem:       [{ position: 40, label: 'Grad Year', importance: #MEDIUM }]
+  @UI.selectionField: [{ position: 20 }]
+  GradYear;
+
+  /* ── Administrative Data ─────────────────────── */
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 10, label: 'Created By' }]
+  CreatedBy;
+
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 20, label: 'Created At' }]
+  CreatedAt;
+
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 30, label: 'Last Changed By' }]
+  LastChangedBy;
+
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 40, label: 'Last Changed At' }]
+  LastChangedAt;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+
+}

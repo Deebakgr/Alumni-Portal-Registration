@@ -1,0 +1,153 @@
+
+@Metadata.layer: #CORE
+
+@UI.headerInfo: {
+  typeName:       'Alumnus',
+  typeNamePlural: 'Alumni List',
+  title:          { type: #STANDARD, value: 'FirstName'  }, 
+  description:    { type: #STANDARD, value: 'LastName' }
+}
+
+@UI.presentationVariant: [{
+  sortOrder:      [{ by: 'AlumniId', direction: #ASC }],
+  visualizations: [{ type: #AS_LINEITEM }]
+}]
+
+/* ── Selection Variants (For the List Report Tabs) ────────── */
+@UI.selectionVariant: [
+  { qualifier: 'SVActive',   text: 'Active',   filter: 'RegStatus EQ ''ACTIVE''' },
+  { qualifier: 'SVPending',  text: 'Pending',  filter: 'RegStatus EQ ''PENDING''' },
+  { qualifier: 'SVReview',   text: 'Review',   filter: 'RegStatus EQ ''REVIEW''' },   // NEW
+  { qualifier: 'SVRejected', text: 'Rejected', filter: 'RegStatus EQ ''REJECTED''' },
+  { qualifier: 'SVInactive', text: 'Inactive', filter: 'RegStatus EQ ''INACTIVE''' }  // NEW
+]
+
+annotate view ZC_AlumniRegistration with
+{
+  /* ═══════════════════════════════════════════════════════════════
+     UI FACETS
+  ═══════════════════════════════════════════════════════════════ */
+  @UI.facet: [
+    
+    /* ── 1. HEADER KPI BADGES (Object Page Top) ────────────────── */
+    { 
+      id:              'StatusHeader',       
+      purpose:         #HEADER, 
+      type:            #DATAPOINT_REFERENCE,
+      position:        10, 
+      targetQualifier: 'StatusDP'       
+    },
+    { 
+      id:              'GradYearHeader',     
+      purpose:         #HEADER, 
+      type:            #DATAPOINT_REFERENCE,
+      position:        20, 
+      targetQualifier: 'GradYearDP'     
+    },
+
+    /* ── 2. OBJECT PAGE BODY (Tabs below the header) ──────────── */
+    {
+      id:              'GeneralInfoFacet',
+      label:           'General Information',
+      purpose:         #STANDARD,
+      type:            #FIELDGROUP_REFERENCE,
+      targetQualifier: 'GeneralGroup',
+      position:        10
+    },
+    {
+      id:              'DegreesFacet',
+      label:           'Degrees Earned',
+      purpose:         #STANDARD,
+      type:            #LINEITEM_REFERENCE,
+      position:        20,
+      targetElement:   '_Degrees'
+    },
+    {
+      id:              'AdminFacet',
+      label:           'Administrative Data',
+      purpose:         #STANDARD,
+      type:            #FIELDGROUP_REFERENCE,
+      targetQualifier: 'AdminGroup',
+      position:        30
+    }
+  ]
+
+ /* ── Key Fields & Action Buttons ────────────────────────── */
+  @UI.fieldGroup:     [{ qualifier: 'GeneralGroup', position: 10, label: 'Alumni ID' }]
+  @UI.selectionField: [{ position: 10 }]
+  @UI.textArrangement: #TEXT_ONLY
+  
+ -- List Report Table Buttons --
+  @UI.lineItem: [
+    { position: 10, label: 'Alumni ID', importance: #HIGH },
+    { type: #FOR_ACTION, dataAction: 'approvealumni', label: 'Approve' },
+    { type: #FOR_ACTION, dataAction: 'rejectalumni',  label: 'Reject' },
+    { type: #FOR_ACTION, dataAction: 'reviewalumni',  label: 'Review' },     // NEW
+    { type: #FOR_ACTION, dataAction: 'deactivatealumni', label: 'Deactivate' } // NEW
+  ]
+  
+  -- Object Page Header Buttons --
+  @UI.identification: [
+    { position: 10 },
+    { type: #FOR_ACTION, dataAction: 'approvealumni', label: 'Approve' },
+    { type: #FOR_ACTION, dataAction: 'rejectalumni',  label: 'Reject' },
+    { type: #FOR_ACTION, dataAction: 'reviewalumni',  label: 'Review' },     // NEW
+    { type: #FOR_ACTION, dataAction: 'deactivatealumni', label: 'Deactivate' } // NEW
+  ]
+  AlumniId;
+  /* ── Personal Info ───────────────────────────────── */
+  @UI.fieldGroup:     [{ qualifier: 'GeneralGroup', position: 20, label: 'First Name' }]
+  @UI.lineItem:       [{ position: 20, label: 'First Name', importance: #HIGH }]
+  @UI.selectionField: [{ position: 20 }]
+  FirstName;
+
+  @UI.fieldGroup:     [{ qualifier: 'GeneralGroup', position: 30, label: 'Last Name' }]
+  @UI.lineItem:       [{ position: 30, label: 'Last Name', importance: #HIGH }]
+  @UI.selectionField: [{ position: 30 }]
+  LastName;
+
+  /* ── Graduation Year (Linked to Header DataPoint!) ── */
+  @UI.fieldGroup:     [{ qualifier: 'GeneralGroup', position: 40, label: 'Graduation Year' }]
+  @UI.lineItem:       [{ position: 40, label: 'Grad Year', importance: #MEDIUM }]
+  @UI.selectionField: [{ position: 40 }]
+  // 👇 This links the field to the GradYearHeader facet!
+  @UI.dataPoint:      { qualifier: 'GradYearDP', title: 'Graduation Year' }
+  GradYear;
+
+  @UI.fieldGroup:     [{ qualifier: 'GeneralGroup', position: 50, label: 'Degree Program' }]
+  @UI.lineItem:       [{ position: 50, label: 'Degree Program', importance: #MEDIUM }]
+  @UI.selectionField: [{ position: 50 }]
+  DegreeProgram;
+
+  @UI.fieldGroup:     [{ qualifier: 'GeneralGroup', position: 60, label: 'Email Address' }]
+  @UI.lineItem:       [{ position: 60, label: 'Email', importance: #MEDIUM }]
+  EmailAddress;
+
+  /* ── Registration Status (Linked to Header DataPoint!) ── */
+  @UI.fieldGroup:     [{ qualifier: 'GeneralGroup', position: 70, label: 'Registration Status' }]
+  @UI.lineItem:       [{ position: 70, label: 'Status', importance: #HIGH, criticality: 'RegStatusCriticality' }]
+  @UI.selectionField: [{ position: 60 }]
+  @UI.textArrangement: #TEXT_ONLY
+  // 👇 This links the field to the StatusHeader facet and applies the color!
+  @UI.dataPoint:      { qualifier: 'StatusDP', title: 'Registration Status', criticality: 'RegStatusCriticality' }
+  RegStatus;
+
+  @UI.hidden: true
+  RegStatusCriticality;
+
+  /* ── Administrative Data ─────────────────────────── */
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 10, label: 'Created By' }]
+  CreatedBy;
+
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 20, label: 'Created At' }]
+  CreatedAt;
+
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 30, label: 'Last Changed By' }]
+  LastChangedBy;
+
+  @UI.fieldGroup: [{ qualifier: 'AdminGroup', position: 40, label: 'Last Changed At' }]
+  LastChangedAt;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

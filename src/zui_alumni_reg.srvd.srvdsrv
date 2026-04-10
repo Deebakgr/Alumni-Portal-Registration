@@ -1,0 +1,5 @@
+@EndUserText.label: 'Service Definition for Alumni Portal'
+define service ZUI_ALUMNI_REG {
+  expose ZC_AlumniRegistration as Alumni;
+  expose ZC_AlumniDegrees      as Degrees;
+}

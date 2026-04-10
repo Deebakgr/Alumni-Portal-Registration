@@ -1,0 +1,5 @@
+CLASS zbp_alumni_header DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zi_alumniregistration.
+ENDCLASS.
+
+CLASS zbp_alumni_header IMPLEMENTATION.
+ENDCLASS.

@@ -1,0 +1,36 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZC_AlumniRegistration alias Alumni
+{
+  use create;
+  use update;
+  use delete;
+
+
+  // 1. Expose Draft Actions so Fiori shows the Edit, Save, and Cancel buttons
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  use action approvealumni;
+  use action rejectalumni;
+
+  use action reviewalumni;
+  use action deactivatealumni;
+
+  // 2. Add 'with draft' to allow adding degrees while the header is in draft mode
+  use association _Degrees { create; with draft; }
+}
+
+define behavior for ZC_AlumniDegrees alias Degree
+{
+  use update;
+  use delete;
+
+  // 3. Add 'with draft' to link the item back to the parent's draft state
+  use association _AlumniRegistration { with draft; }
+}

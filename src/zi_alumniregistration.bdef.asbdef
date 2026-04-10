@@ -1,0 +1,98 @@
+unmanaged implementation in class zbp_alumni_saver unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_AlumniRegistration alias Alumni
+implementation in class zbp_alumni_header unique
+draft table zalumni_reg_d
+lock master
+total etag LastChangedAt
+authorization master ( global )
+etag master LocalLastChangedAt
+early numbering
+{
+
+
+  create;
+  update;
+  delete;
+
+  action ( features : instance ) approvealumni
+    result [1] $self;
+
+  action ( features : instance ) rejectalumni
+    result [1] $self;
+
+    action ( features : instance ) reviewalumni result [1] $self;
+  action ( features : instance ) deactivatealumni result [1] $self;
+
+  association _Degrees { create; with draft; }
+
+  field ( readonly )
+    AlumniId,
+    CreatedAt,
+    CreatedBy,
+    LastChangedAt,
+    LastChangedBy,
+    LocalLastChangedAt;
+
+  draft determine action Prepare;
+  draft action Edit;
+  draft action Activate;
+  draft action Discard;
+  draft action Resume;
+
+  mapping for zalumni_reg
+  {
+    AlumniId           = alumni_id;
+    FirstName          = first_name;
+    LastName           = last_name;
+    GradYear           = grad_year;
+    DegreeProgram      = degree_program;
+    EmailAddress       = email_address;
+    RegStatus          = reg_status;
+    CreatedBy          = created_by;
+    CreatedAt          = created_at;
+    LastChangedBy      = last_changed_by;
+    LastChangedAt      = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}
+
+// --- ITEM BEHAVIOR ---
+define behavior for ZI_AlumniDegrees alias Degree
+implementation in class zbp_alumni_item unique
+draft table zalumni_deg_d
+// Ensure '_Alumni' exactly matches the association in your Item CDS View
+lock dependent by _AlumniRegistration
+authorization dependent by _AlumniRegistration
+etag master LocalLastChangedAt // Changed from etag dependent
+early numbering
+{
+  update;
+  delete;
+
+  association _AlumniRegistration { with draft; } // Match association name here too
+
+  field ( readonly )
+    AlumniId,
+    DegreeId,
+    CreatedAt,
+    CreatedBy,
+    LastChangedAt,
+    LastChangedBy,
+    LocalLastChangedAt;
+
+  mapping for zalumni_degrees
+  {
+    AlumniId           = alumni_id;
+    DegreeId           = degree_id;
+    DegreeName         = degree_name;
+    GradYear           = grad_year;
+    CreatedBy          = created_by;
+    CreatedAt          = created_at;
+    LastChangedBy      = last_changed_by;
+    LastChangedAt      = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}
