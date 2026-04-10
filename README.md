@@ -1,12 +1,12 @@
-# Alumni Portal Registration (SAP BTP ABAP RAP)
+# Alumni Portal Registration (SAP BTP ABAP RAP) 
 
-A modern, full-stack enterprise application built using the **SAP ABAP RESTful Application Programming Model (RAP)** on SAP BTP. This project manages the lifecycle of alumni registrations, from initial pending status through approval, review, or rejection.
+A modern, full-stack enterprise application built using the **SAP ABAP RESTful Application Programming Model (RAP Unmanaged )** on SAP BTP. This project manages the lifecycle of alumni registrations, from initial pending status through approval, review, or rejection.
 
 ---
 
 ## 🚀 Key Features
 
-* **Managed & Unmanaged Hybrid Approach:** Utilizes a custom save sequence and utility buffer classes to handle complex data persistence.
+* **Unmanaged Hybrid Approach:** Utilizes a custom save sequence and utility buffer classes to handle complex data persistence.
 * **Draft Capability:** Supports "Work-in-Progress" states, allowing users to leave and return to their registration without losing data.
 * **Early Numbering:** Implements a custom ID generator (`001`, `002`, etc.) that prevents key collisions in both Draft and Active tables.
 * **Dynamic Feature Control:** Action buttons (Approve, Reject, Review, Deactivate) automatically enable or disable based on the current registration status.
